@@ -1,1 +1,29 @@
 
+name: Generate Pacman
+
+on:
+	schedule:
+		- cron: "0 1 * * *"
+	workflow_dispatch:
+	push:
+		branches:
+			- main
+
+jobs:
+	build:
+		runs-on: ubuntu-latest
+		steps:
+			- uses: actions/checkout@v4
+
+			- name: Generate pacman SVG
+				uses: abozanona/pacman-contribution-graph@main
+				with:
+					github_user_name: kdptan
+					output_path: dist/pacman.svg
+
+			- name: Commit pacman SVG
+				uses: stefanzweifel/git-auto-commit-action@v5
+				with:
+					commit_message: "chore: update pacman svg"
+					file_pattern: dist/pacman.svg
+
